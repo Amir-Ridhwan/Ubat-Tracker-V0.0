@@ -1,8 +1,7 @@
-﻿Imports MySql.Data.MySqlClient
+Imports Microsoft.Data.SqlClient
+
 Public Class Delete_Details
 
-    Dim MysqlConn As MySqlConnection
-    Dim COMMAND As MySqlCommand
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         Main_Dashboard.Show()
         Me.Visible = False
@@ -10,35 +9,27 @@ Public Class Delete_Details
 
     Private Sub Delete_Button_Click(sender As Object, e As EventArgs) Handles Delete_Button.Click
 
-        MysqlConn = New MySqlConnection
-        MysqlConn.ConnectionString = "server=localhost;userid=root; password=password;database=UBAT"
-        Dim READER As MySqlDataReader
+        If String.IsNullOrWhiteSpace(TextBox_Delete.Text) Then
+            MessageBox.Show("No IC Number!")
+            Return
+        End If
 
-        Try
-            MysqlConn.Open()
-            Dim Query As String
-            Query = "DELETE FROM UBAT.Users WHERE IC ='" & TextBox_Delete.Text & "'"
+        Dim result As DialogResult = MessageBox.Show("You are about to delete data. Press Ok to continue.", "Confirm Deletion", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning)
+        If result = DialogResult.OK Then
+            Try
+                Dim query As String = "DELETE FROM Users WHERE IC = @IC"
+                Dim command As New SqlCommand(query)
+                command.Parameters.AddWithValue("@IC", TextBox_Delete.Text)
 
-            COMMAND = New MySqlCommand(Query, MysqlConn)
-            READER = COMMAND.ExecuteReader
+                openConnection()
+                IUD(command)
+                MessageBox.Show("Data Deleted!")
+            Catch ex As Exception
+                MessageBox.Show("An error occurred: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Finally
+                closeConnection()
+            End Try
+        End If
 
-            MessageBox.Show("You are about to delete data. Press Ok to continue.")
-
-            While TextBox_Delete.Text = ""
-                MessageBox.Show("No IC Number!")
-                Exit Sub
-            End While
-
-            MessageBox.Show("Data Deleted!")
-
-            MysqlConn.Close()
-
-        Catch ex As Exception
-            MessageBox.Show(ex.Message)
-
-        Finally
-            MysqlConn.Dispose()
-
-        End Try
     End Sub
 End Class

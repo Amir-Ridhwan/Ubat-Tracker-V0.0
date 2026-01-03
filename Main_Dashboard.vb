@@ -1,4 +1,4 @@
-﻿Imports System.Configuration
+Imports System.Configuration
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Imports System.Windows.Markup
 Imports Microsoft.Data.SqlClient
@@ -22,44 +22,17 @@ Public Class Main_Dashboard
 
     Private Sub Label1_Click_1(sender As Object, e As EventArgs) Handles welcome.VisibleChanged
 
-        'MysqlConn = New MySqlConnection
-        'MysqlConn.ConnectionString = "server=localhost;userid=root; database=UBAT"
-        'Dim READER As MySqlDataReader
-
-        'If Email = "" Then
-
-        'Else
-        '    Try
-        '        MysqlConn.Open()
-        '        Dim Query As String
-        '        Query = "SELECT Name FROM UBAT.Users WHERE Email ='" & Email & "'"
-
-        '        COMMAND = New MySqlCommand(Query, MysqlConn)
-        '        READER = COMMAND.ExecuteReader
-        '        READER.Read()
-
-        '        welcome.Text = "Welcome " + READER.Item(0).ToString()
-
-        '        MysqlConn.Close()
-
-        '    Catch ex As Exception
-        '        MessageBox.Show(ex.Message)
-
-        '    Finally
-        '        MysqlConn.Dispose()
-
-        '    End Try
-
-        'End If
-
         If Email = "" Then
 
         Else
             Try
-                sql = "SELECT Name FROM Users WHERE Email ='" & Login_Page.Email & "'"
+                Dim query As String = "SELECT Name FROM Users WHERE Email = @Email"
+                Dim command As New SqlCommand(query)
+                command.Parameters.AddWithValue("@Email", Login_Page.Email)
+
                 Dim record As SqlDataReader
                 openConnection()
-                record = getRecords()
+                record = getRecords(command)
                 If record.HasRows Then
                     record.Read()
                     welcome.Text = "Welcome " + record.Item("Name")
