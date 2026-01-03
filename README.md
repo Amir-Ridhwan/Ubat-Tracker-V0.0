@@ -34,7 +34,7 @@ To deploy this project, download the zipped file of the repository, uncompressed
 
 To start the program, first we need to move the database file to the Microsoft SQL Server Management Studio directory. Find file name UBAT.mdf and UBAT.log. Copy it to directory >>This PC >> C: >> Program Files >> Microsoft SQL Server >> MSSQL16.SQLEXPRESS >> MSSQL >> DATA. Paste the files into DATA. 
 
-Start the Microsoft SQL Server Management Studio. COnnect to Server name .\sqlexpress, use Windows Authentication, Encrypt Optional and click connect. On the left hand side, it should show Object Explorer. Right click on the folder Databases and click Attach....  
+Start the Microsoft SQL Server Management Studio. Connect to Server name .\sqlexpress, use Windows Authentication, Encrypt Optional and click connect. On the left hand side, it should show Object Explorer. Right click on the folder Databases and click Attach....  
 
 It should pop up screen box which Databases to attach. Attach database UBAT.mdf and click button Add. 
     
