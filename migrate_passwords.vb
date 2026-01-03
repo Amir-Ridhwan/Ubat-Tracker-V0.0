@@ -1,5 +1,5 @@
 Imports Microsoft.Data.SqlClient
-Imports BCrypt.Net
+Imports BCryptNet
 
 Module MigratePasswords
     Sub Main()
@@ -21,7 +21,7 @@ Module MigratePasswords
 
                             ' --- Hash Password ---
                             If Not String.IsNullOrEmpty(plaintextPassword) AndAlso Not plaintextPassword.StartsWith("$2a$") Then
-                                Dim hashedPassword As String = BCrypt.HashPassword(plaintextPassword)
+                                Dim hashedPassword As String = BCryptNet.BCrypt.HashPassword(plaintextPassword)
                                 usersToUpdate.Add(Tuple.Create(ic, hashedPassword))
                             End If
                         End While
