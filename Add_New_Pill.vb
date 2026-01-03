@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Forms.VisualStyles.VisualStyleElement
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement.ToolBar
 Imports Microsoft.Data.SqlClient
 Imports MySql.Data.MySqlClient
@@ -38,50 +38,28 @@ Public Class Add_New_Pill
 
     Private Sub Display_IC_1(sender As Object, e As EventArgs) Handles Display_IC.VisibleChanged
 
-        'MysqlConn = New MySqlConnection
-        'MysqlConn.ConnectionString = "server=localhost;userid=root; database=UBAT"
-        'Dim READER As MySqlDataReader
+        If String.IsNullOrEmpty(Login_Page.Email) Then
+            Display_IC.Text = "No IC!"
+        Else
+            Try
+                Dim query As String = "SELECT IC FROM Users WHERE Email = @Email"
+                Dim command As New SqlCommand(query)
+                command.Parameters.AddWithValue("@Email", Login_Page.Email)
 
-        'If Login_Page.Email = "" Then
-
-        '    Display_IC.Text = "No IC!"
-
-        'Else
-        '    Try
-        '        MysqlConn.Open()
-        '        Dim Query As String
-        '        Query = "SELECT IC FROM UBAT.Users WHERE Email ='" & Login_Page.Email & "'"
-
-        '        COMMAND = New MySqlCommand(Query, MysqlConn)
-        '        READER = COMMAND.ExecuteReader
-        '        READER.Read()
-
-        '        Display_IC.Text = READER.Item(0).ToString()
-
-        '        MysqlConn.Close()
-
-        '    Catch ex As Exception
-        '        MessageBox.Show(ex.Message)
-
-        '    Finally
-        '        MysqlConn.Dispose()
-
-        '    End Try
-
-        'End If
-
-        sql = "SELECT IC FROM Users WHERE Email ='" & Login_Page.Email & "'"
-        Dim record As SqlDataReader
-        openConnection()
-        record = getRecords()
-        If record.HasRows Then
-            record.Read()
-            Display_IC.Text = record.Item("IC")
+                openConnection()
+                Dim record As SqlDataReader = getRecords(command)
+                If record.HasRows Then
+                    record.Read()
+                    Display_IC.Text = record.Item("IC").ToString()
+                End If
+            Catch ex As Exception
+                MessageBox.Show("An error occurred: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Finally
+                closeConnection()
+            End Try
         End If
-        closeConnection()
-
-
     End Sub
+
 
     Private Sub TextBox_Dosage_KeyPress(ByVal sender As Object, ByVal e As KeyPressEventArgs)
         'If TextBox_Dosage.Text.Length > 4 Then
@@ -219,15 +197,22 @@ Public Class Add_New_Pill
     End Sub
 
     Sub getdata()
-        Dim ds As DataSet
-        openConnection()
-        sql = "Select Pill_Name, Dosage_Unit, Disease from Pill order by Pill_Name"
-        ds = getDS()
-        DataGridView1.DataSource = ds.Tables(0)
-        DataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells
-        DataGridView1.Refresh()
-        closeConnection()
+        Try
+            Dim query As String = "SELECT Pill_Name, Dosage_Unit, Disease FROM Pill ORDER BY Pill_Name"
+            Dim command As New SqlCommand(query)
+
+            openConnection()
+            Dim ds As DataSet = getDS(command)
+            DataGridView1.DataSource = ds.Tables(0)
+            DataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells
+            DataGridView1.Refresh()
+        Catch ex As Exception
+            MessageBox.Show("An error occurred while fetching data: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Finally
+            closeConnection()
+        End Try
     End Sub
+
 
     Private Sub delete_pill_information_Click(sender As Object, e As EventArgs) Handles delete_pill_information.Click
 

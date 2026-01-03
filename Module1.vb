@@ -1,12 +1,7 @@
-﻿
 Imports Microsoft.Data.SqlClient
 Module Module1
     Public conn As SqlConnection
     Public databaseconnection As String = "Data Source=.\SQLEXPRESS; Initial Catalog=UBAT;Integrated Security=SSPI;Encrypt=False;"
-    Public cmd As SqlCommand
-    Public sql As String
-    Public reader As SqlDataReader
-    Public ds1 As DataSet
 
     Public Sub openConnection()
         conn = New SqlConnection(databaseconnection)
@@ -17,39 +12,33 @@ Module Module1
         conn.Close()
     End Sub
 
-    Public Sub IUD()
-        cmd = New SqlCommand(sql, conn)
-        cmd.ExecuteNonQuery()
-        cmd.Dispose()
+    Public Sub IUD(command As SqlCommand)
+        command.Connection = conn
+        command.ExecuteNonQuery()
+        command.Dispose()
     End Sub
 
-    Public Function getOneValue() As String
-        Dim v As String
-        cmd = New SqlCommand(sql, conn)
-        If cmd.ExecuteScalar() <> Nothing Then
-            v = cmd.ExecuteScalar().ToString()
+    Public Function getOneValue(command As SqlCommand) As String
+        command.Connection = conn
+        Dim result = command.ExecuteScalar()
+        If result IsNot Nothing AndAlso result IsNot DBNull.Value Then
+            Return result.ToString()
         Else
-            v = ""
+            Return ""
         End If
-        cmd.Dispose()
-        Return v
     End Function
 
-    Public Function getRecords() As SqlDataReader
-        Dim r As SqlDataReader
-        cmd = New SqlCommand(sql, conn)
-        r = cmd.ExecuteReader()
-        cmd.Dispose()
-        Return r
+    Public Function getRecords(command As SqlCommand) As SqlDataReader
+        command.Connection = conn
+        Return command.ExecuteReader()
     End Function
 
-    Public Function getDS() As DataSet
-        Dim dataadapter As New SqlDataAdapter(sql, conn)
+    Public Function getDS(command As SqlCommand) As DataSet
+        command.Connection = conn
+        Dim dataadapter As New SqlDataAdapter(command)
         Dim ds As New DataSet()
         dataadapter.Fill(ds, "Record")
         Return ds
     End Function
 
 End Module
-
-
