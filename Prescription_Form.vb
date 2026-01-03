@@ -1,6 +1,8 @@
 Imports Microsoft.Data.SqlClient
 
 Public Class Prescription_Form
+    Private ds1 As DataSet
+    Private ds2 As DataSet
 
     Private Sub Prescription_Form_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ComboBox1.DropDownStyle = ComboBoxStyle.DropDownList

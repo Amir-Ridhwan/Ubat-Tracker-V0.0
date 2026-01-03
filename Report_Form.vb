@@ -2,6 +2,8 @@ Imports Microsoft.Reporting.WinForms
 Imports Microsoft.Data.SqlClient
 
 Public Class Report_Form
+    Private ds1 As DataSet
+
     Private Sub Report_Form_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ComboBox1.DropDownStyle = ComboBoxStyle.DropDownList
         showcombo()
