@@ -63,5 +63,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
-Testing commit to Github
+## Feedback
+
+If you have any feedback, please reach out to us at amir2idhwan@gmail.com
 
