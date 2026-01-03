@@ -65,5 +65,5 @@ SOFTWARE.
 
 ## Feedback
 
-If you have any feedback, please reach out to us at amir2idhwan@gmail.com and mamirridhwan@gmail.com.
+If you have any feedback, please reach out to us at amir2idhwan@gmail.com
 
