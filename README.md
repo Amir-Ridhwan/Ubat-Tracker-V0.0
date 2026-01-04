@@ -46,7 +46,7 @@ Start the Microsoft SQL Server Management Studio. Connect to Server name .\sqlex
 
 It should pop up screen box which Databases to attach. Attach database UBAT.mdf and click button Add.
 
-If errors called "restricted files" pop up at debugging console, go to File Explorer of the solution, find Login_Page.resx and right-click to open Properties. Uncheck the box that block the file. Do the same with Main_Dashboard.resx and Uncheck the box. 
+If errors called "restricted files" pop up at debugging console, go to File Explorer of the solution, find Login_Page.resx and right-click to open Properties. Uncheck the box that block the file. Do the same with Main_Dashboard.resx and Uncheck the box. Run again the program.  
 
 ## License
 
