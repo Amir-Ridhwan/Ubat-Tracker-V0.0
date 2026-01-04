@@ -4,14 +4,13 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
     <RootNamespace>Ubat_Tracker_V0._0</RootNamespace>
-    <StartupObject>Ubat_Tracker_V0._0.My.MyApplication</StartupObject>
+    <StartupObject>Sub Main</StartupObject>
     <UseWindowsForms>true</UseWindowsForms>
     <MyType>WindowsForms</MyType>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="My Project\**" />
-    <Compile Remove="migrate_passwords.vb" />
     <EmbeddedResource Remove="My Project\**" />
     <None Remove="My Project\**" />
   </ItemGroup>
