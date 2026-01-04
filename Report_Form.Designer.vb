@@ -60,7 +60,7 @@ Partial Class Report_Form
         ' 
         Button2.BackColor = SystemColors.ActiveCaption
         Button2.FlatStyle = FlatStyle.Popup
-        Button2.Font = New Font("Segoe UI", 12.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Button2.Font = New Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Button2.Location = New Point(604, 13)
         Button2.Name = "Button2"
         Button2.Size = New Size(112, 52)
@@ -92,7 +92,7 @@ Partial Class Report_Form
         ' 
         ' Report_Form
         ' 
-        AutoScaleDimensions = New SizeF(7.0F, 15.0F)
+        AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = SystemColors.GradientInactiveCaption
         ClientSize = New Size(1024, 525)
