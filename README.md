@@ -1,8 +1,8 @@
 # UBAT TRACKER V0.0
 
-This is my project for subject UFH 2009 Application Programming. It keep track the medicine for pharmacy and patient.
+This is my project for subject UFH 2009 Application Programming. It keep track the medicine for pharmacy and patient. This is mockup system designed for University Malaya Medical Center. All right reserved. 
 
-I would like to thank Professor Ang Tan Fong for his guidance in this project.
+I would like to thank Professor Ang Tan Fong from University of Malaya for his guidance in this project.
 
 ## Data Migration for Password Hashing
 
@@ -36,7 +36,7 @@ Please adhere to this project's `code of conduct`.
 
 ## Deployment
 
-To deploy this project, download the zipped file of the repository, uncompressed it.  install Microsoft Visual Studio Community 2022, install Microsoft SQL Express and finally install Microsoft SQL Server Management Studio. Open services.msc to ensure service called SQL Server (SQLEXPRESS) is running.
+To deploy this project, download the zipped file of the repository, uncompressed it.  install Microsoft Visual Studio Community 2022, install Microsoft SQL Express 2022 and finally install Microsoft SQL Server Management Studio. Open services.msc to ensure service called SQL Server (SQLEXPRESS) is running.
 
 ## Installation
 
@@ -45,6 +45,8 @@ To start the program, first we need to move the database file to the Microsoft S
 Start the Microsoft SQL Server Management Studio. Connect to Server name .\sqlexpress, use Windows Authentication, Encrypt Optional and click connect. On the left hand side, it should show Object Explorer. Right click on the folder Databases and click Attach....
 
 It should pop up screen box which Databases to attach. Attach database UBAT.mdf and click button Add.
+
+If errors called "restricted files" pop up at debugging console, go to File Explorer of the solution, find Login_Page.resx and right-click to open Properties. Uncheck the box that block the file. Do the same with Main_Dashboard.resx and Uncheck the box. 
 
 ## License
 
