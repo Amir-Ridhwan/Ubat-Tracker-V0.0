@@ -1,183 +1,116 @@
+﻿Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Imports Microsoft.Data.SqlClient
 
 Public Class Prescription_Form
-    Private ds1 As DataSet
-    Private ds2 As DataSet
-
     Private Sub Prescription_Form_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ComboBox1.DropDownStyle = ComboBoxStyle.DropDownList
-        ComboBox2.DropDownStyle = ComboBoxStyle.DropDownList
-        showcombo()
-        showcombo2()
+
+        getdata()
+
     End Sub
 
-    Private Sub showcombo()
+    Sub getdata()
         Try
-            Dim query As String = "SELECT * FROM Pill ORDER BY Pill_Name"
-            Dim command As New SqlCommand(query)
-
             openConnection()
-            ds1 = getDS(command)
 
+            sql = "select * from Pill order by Pill_Name"
+            Dim ds1 = New DataSet
+            ds1 = getDS()
             ComboBox1.DataSource = ds1.Tables(0)
             ComboBox1.DisplayMember = "Pill_Name"
             ComboBox1.ValueMember = "Pill_Name"
 
-        Catch ex As Exception
-            MessageBox.Show("An error occurred: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        Finally
-            closeConnection()
-        End Try
-    End Sub
-
-    Private Sub showcombo2()
-        Try
-            Dim query As String = "SELECT * FROM Pill ORDER BY Pill_Name"
-            Dim command As New SqlCommand(query)
-
-            openConnection()
-            ds2 = getDS(command)
-
+            sql = "select * from Pill order by Pill_Name"
+            Dim ds2 = New DataSet
+            ds2 = getDS()
             ComboBox2.DataSource = ds2.Tables(0)
-            ComboBox2.DisplayMember = "Pill_Name"
-            ComboBox2.ValueMember = "Pill_Name"
+            ComboBox2.DisplayMember = "Disease"
+            ComboBox2.ValueMember = "Disease"
 
-        Catch ex As Exception
-            MessageBox.Show("An error occurred: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        Finally
             closeConnection()
+        Catch e As Exception
+            MessageBox.Show(e.Message)
         End Try
+
     End Sub
 
     Private Sub Display_IC_VisibleChanged(sender As Object, e As EventArgs) Handles Display_IC.VisibleChanged
-        Try
-            Dim query As String = "SELECT IC FROM Users WHERE Email = @Email"
-            Dim command As New SqlCommand(query)
-            command.Parameters.AddWithValue("@Email", Login_Page.Email)
 
-            openConnection()
-            Dim record As SqlDataReader = getRecords(command)
-            If record.HasRows Then
-                record.Read()
-                Display_IC.Text = record.Item("IC").ToString()
-            End If
-        Catch ex As Exception
-            MessageBox.Show("An error occurred: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        Finally
-            closeConnection()
-        End Try
-    End Sub
-
-    Private Sub Button_Save_Click(sender As Object, e As EventArgs) Handles Button_Save.Click
-        ' --- Input Validation ---
-        If ComboBox1.SelectedItem Is Nothing OrElse String.IsNullOrWhiteSpace(ComboBox1.SelectedValue.ToString()) Then
-            MessageBox.Show("Please select a pill.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return
+        sql = "SELECT IC FROM Users WHERE Email ='" & Login_Page.Email & "'"
+        Dim record As SqlDataReader
+        openConnection()
+        record = getRecords()
+        If record.HasRows Then
+            record.Read()
+            Display_IC.Text = record.Item("IC")
         End If
-
-        If String.IsNullOrWhiteSpace(TextBox_Intake.Text) Then
-            MessageBox.Show("Please enter the intake frequency.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return
-        End If
-
-        ' --- Database Insertion ---
-        Try
-            Dim query As String = "INSERT INTO Prescription (IC, Pill_Name, Intake_Frequency, Before_After_Meal) " &
-                                "VALUES (@IC, @Pill_Name, @Intake_Frequency, @Before_After_Meal)"
-
-            Dim command As New SqlCommand(query)
-            command.Parameters.AddWithValue("@IC", Display_IC.Text)
-            command.Parameters.AddWithValue("@Pill_Name", ComboBox1.SelectedValue)
-            command.Parameters.AddWithValue("@Intake_Frequency", TextBox_Intake.Text)
-
-            If RadioButton_Before.Checked Then
-                command.Parameters.AddWithValue("@Before_After_Meal", "Before")
-            Else
-                command.Parameters.AddWithValue("@Before_After_Meal", "After")
-            End If
-
-            openConnection()
-            IUD(command)
-
-            MessageBox.Show("Prescription saved successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-
-        Catch ex As Exception
-            MessageBox.Show("An error occurred: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        Finally
-            closeConnection()
-        End Try
-    End Sub
-
-    Private Sub Button_Update_Click(sender As Object, e As EventArgs) Handles Button_Update.Click
-        ' --- Input Validation ---
-        If ComboBox2.SelectedItem Is Nothing OrElse String.IsNullOrWhiteSpace(ComboBox2.SelectedValue.ToString()) Then
-            MessageBox.Show("Please select a pill to update.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return
-        End If
-
-        If String.IsNullOrWhiteSpace(TextBox_Update_Intake.Text) Then
-            MessageBox.Show("Please enter the new intake frequency.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return
-        End If
-
-        ' --- Database Update ---
-        Try
-            Dim query As String = "UPDATE Prescription SET Intake_Frequency = @Intake_Frequency, Before_After_Meal = @Before_After_Meal " &
-                                "WHERE IC = @IC AND Pill_Name = @Pill_Name"
-
-            Dim command As New SqlCommand(query)
-            command.Parameters.AddWithValue("@Intake_Frequency", TextBox_Update_Intake.Text)
-
-            If RadioButton_Update_Before.Checked Then
-                command.Parameters.AddWithValue("@Before_After_Meal", "Before")
-            Else
-                command.Parameters.AddWithValue("@Before_After_Meal", "After")
-            End If
-
-            command.Parameters.AddWithValue("@IC", Display_IC.Text)
-            command.Parameters.AddWithValue("@Pill_Name", ComboBox2.SelectedValue)
-
-            openConnection()
-            IUD(command)
-
-            MessageBox.Show("Prescription updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-
-        Catch ex As Exception
-            MessageBox.Show("An error occurred: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        Finally
-            closeConnection()
-        End Try
-    End Sub
-
-    Private Sub Button_Delete_Click(sender As Object, e As EventArgs) Handles Button_Delete.Click
-        ' --- Input Validation ---
-        If ComboBox2.SelectedItem Is Nothing OrElse String.IsNullOrWhiteSpace(ComboBox2.SelectedValue.ToString()) Then
-            MessageBox.Show("Please select a pill to delete.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return
-        End If
-
-        ' --- Database Deletion ---
-        Try
-            Dim query As String = "DELETE FROM Prescription WHERE IC = @IC AND Pill_Name = @Pill_Name"
-
-            Dim command As New SqlCommand(query)
-            command.Parameters.AddWithValue("@IC", Display_IC.Text)
-            command.Parameters.AddWithValue("@Pill_Name", ComboBox2.SelectedValue)
-
-            openConnection()
-            IUD(command)
-
-            MessageBox.Show("Prescription deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-
-        Catch ex As Exception
-            MessageBox.Show("An error occurred: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        Finally
-            closeConnection()
-        End Try
+        closeConnection()
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         Main_Dashboard.Show()
         Me.Hide()
     End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        Login_Page.Show()
+        Me.Hide()
+        Display_IC.Text = ""
+
+    End Sub
+
+    Private Sub cancel_button_Click(sender As Object, e As EventArgs) Handles cancel_button.Click
+        Reset()
+    End Sub
+    Sub Reset()
+        ComboBox1.Text = ""
+        ComboBox2.Text = ""
+        TextBox1.Text = ""
+        TextBox2.Text = ""
+
+    End Sub
+
+    Private Sub submit_button_Click(sender As Object, e As EventArgs) Handles submit_button.Click
+
+
+        ' 1. Define your connection string
+        Dim connString As String = "Data Source=.\SQLEXPRESS; Initial Catalog=UBAT;Integrated Security=SSPI;Encrypt=False;"
+
+        ' 2. Define your SQL query with parameters
+        Dim query As String = "INSERT INTO Prescription (IC, Pill_Name, Pill_Dosage, Pill_Quantity, Disease) " &
+                           "VALUES (@IC, @Pill_Name, @Pill_Dosage, @Pill_Quantity, @Disease ); "
+
+        ' 3. Use 'Using' blocks to ensure connections are closed and disposed of properly
+        Using conn As New SqlConnection(connString)
+            Using cmd As New SqlCommand(query, conn)
+                ' 4. Add parameters with their respective values
+                cmd.Parameters.AddWithValue("IC", Display_IC.Text)
+                cmd.Parameters.AddWithValue("@Pill_Name", ComboBox1.SelectedValue)
+                cmd.Parameters.AddWithValue("@Pill_Dosage", TextBox1.Text)
+                cmd.Parameters.AddWithValue("@Pill_Quantity", TextBox2.Text)
+                cmd.Parameters.AddWithValue("@Disease", ComboBox2.SelectedValue)
+
+
+                Try
+                    conn.Open()
+                    ' 5. Execute the update
+                    Dim rowsAffected As Integer = cmd.ExecuteNonQuery()
+
+                    If rowsAffected > 0 Then
+                        Console.WriteLine("Record insert sucessfully")
+                        MsgBox("Record insert sucessfully")
+
+                    Else
+                        Console.WriteLine("No record found with that ID.")
+                        MsgBox("No record found with that ID.")
+                    End If
+
+                Catch ex As SqlException
+                    Console.WriteLine("SQL Error: " & ex.Message)
+                    MsgBox("SQL Error: " & ex.Message)
+                End Try
+            End Using
+        End Using
+        Reset()
+    End Sub
+
 End Class
