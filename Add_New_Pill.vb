@@ -1,7 +1,6 @@
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement.ToolBar
 Imports Microsoft.Data.SqlClient
-Imports MySql.Data.MySqlClient
 Imports Org.BouncyCastle.Utilities.Collections
 
 Public Class Add_New_Pill

@@ -2,7 +2,6 @@ Imports System.Configuration
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Imports System.Windows.Markup
 Imports Microsoft.Data.SqlClient
-Imports MySql.Data.MySqlClient
 
 Public Class Main_Dashboard
 
