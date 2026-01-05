@@ -1,6 +1,6 @@
 # UBAT TRACKER V0.0
 
-This is my project for subject UFH 2009 Application Programming. It keep track the medicine for pharmacy and patient. This is mockup system designed for University Malaya Medical Center. All right reserved. 
+This is my project for subject UFH 2009 Application Programming. It keep track the medicine for pharmacy and patient. This is mockup system designed for pharmacy system.
 
 I would like to thank Professor Ang Tan Fong from University of Malaya for his guidance in this project.
 
